@@ -1,26 +1,25 @@
-# Etapa 1: Build con Maven + JDK 24
-FROM eclipse-temurin:24-jdk-jammy AS build
+# Etapa de build (compilación)
+FROM eclipse-temurin:21-jdk AS build
 
 WORKDIR /app
 
-# Copiar los archivos necesarios para descargar dependencias
+# Copiar pom.xml para que Maven descargue dependencias primero
 COPY pom.xml .
+
+# Copiar el código fuente
 COPY src src
 
-# Ejecutar build Maven (omitiendo tests si quieres) para generar el .jar
+# Construir el proyecto con Maven, omitiendo tests si quieres
 RUN mvn clean package -DskipTests
 
-# Etapa 2: imagen ligera de ejecución con solo el runtime
-FROM eclipse-temurin:24-jre-jammy AS runtime
+# Etapa de runtime (ejecución) con solo JRE para tener la imagen más liviana
+FROM eclipse-temurin:21-jre AS runtime
 
 WORKDIR /app
 
-# Copia el jar generado desde la etapa de build
+# Copiar el .jar generado desde la etapa build
 COPY --from=build /app/target/*.jar app.jar
 
-# Puerto que usará tu Spring Boot (por defecto 8080)
 EXPOSE 8080
 
-# Comando para arrancar la aplicación
-ENTRYPOINT ["java","-jar","/app/app.jar"]
-
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

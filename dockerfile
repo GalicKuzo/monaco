@@ -23,3 +23,4 @@ EXPOSE 8080
 
 # Comando para arrancar la aplicación
 ENTRYPOINT ["java","-jar","/app/app.jar"]
+

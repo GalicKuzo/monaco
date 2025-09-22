@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{layout/fragmentos :: cabecera}"> </head>
+<body>
+<body class="sb-nav-fixed">
+    <nav th:replace="~{layout/fragmentos :: barra}"></nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav th:replace="~{layout/fragmentos :: menu}"></nav>
+        </div>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="py-4">
+
+            </div>
+            <div class="container px-4 py-4">
+                <div class="row justify-content-evenly">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Pedidos
+                        </div>
+                        <div class="card-body">
+                            <table id="datatablesSimple">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre / Celular</th>
+                                        <th>Distrito</th> 
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Nombre / Celular</th>
+                                        <th>Distrito</th> 
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr th:each="item: ${listaDetallePrenda}" th:if="${item.id_Pedido.Estado == 'PENDIENTE'}">
+                                        <td th:text="${item.id_Pedido.id_Cliente.Nombre + ' / ' + item.id_Pedido.id_Cliente.Celular}"></td>
+                                        <td th:text="${item.id_Pedido.id_Cliente.Distrito}"></td>
+                                        <td>
+                                            <span th:text="${item.id_Prenda.Escuderia + ' ' 
+                                                            + item.Color + ' ' 
+                                                            + item.TipoPrenda + ' ' 
+                                                            + item.TipoCorte + ' ' 
+                                                            + item.Talla + ' ' }">
+                                            </span>
+                                            <!-- Personalizados opcionales -->
+                                            <span th:if="${item.personalizados != null and !item.personalizados.isEmpty()}">
+                                                <span th:each="pers : ${item.personalizados}" th:text="${pers.Descripcion}"></span>
+                                            </span>
+                                        </td>
+                                        <td th:text="${item.Cantidad}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card text-bg-secondary mb-3" style="max-width: 18rem;">
+                        <div class="card-header">Gasto Semanal</div>
+                        <div class="card-body d-block justify-content-center align-items-center ">
+                            <div>
+                                <h5 class="card-title ">Prendas</h5>
+                            </div>
+                            <div class="card-body d-block justify-content-center align-items-center">
+                                <p class="text-center" id="monto-soles">S/200</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card text-bg-secondary mb-3" style="max-width: 18rem;">
+                        <div class="card-header">Gasto Semanal</div>
+                        <div class="card-body d-block justify-content-center align-items-center ">
+                            <div>
+                                <h5 class="card-title ">Gastos Basicos</h5>
+                            </div>
+                            <div class="card-body d-block justify-content-center align-items-center">
+                                <p class="text-center" id="monto-soles">S/200</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card text-bg-secondary mb-3" style="max-width: 18rem;">
+                        <div class="card-header">Gasto Semanal</div>
+                        <div class="card-body d-block justify-content-center align-items-center ">
+                            <div>
+                                <h5 class="card-title ">Gastos Varios</h5>
+                            </div>
+                            <div class="card-body d-block justify-content-center align-items-center">
+                                <p class="text-center" id="monto-soles">S/200</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-evenly">
+                    <div class="card text-bg-success mb-3" style="max-width: 18rem;">
+                        <div class="card-header">Ingreso Semanal</div>
+                        <div class="card-body d-block justify-content-center align-items-center ">
+                            <div>
+                                <h5 class="card-title ">Prendas</h5>
+                            </div>
+                            <div class="card-body d-block justify-content-center align-items-center">
+                                <p class="text-center" id="monto-soles">S/1000</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card text-bg-success mb-3" style="max-width: 18rem;">
+                        <div class="card-header">Pedidos Semanales</div>
+                        <div class="card-body d-block justify-content-center align-items-center ">
+                            <div>
+                                <h5 class="card-title ">Clientes Ingresados</h5>
+                            </div>
+                            <div class="card-body d-block justify-content-center align-items-center">
+                                <p class="text-center" id="monto-soles">4</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem;">
+                        <div class="card-header">Escuderia Mas Vendida Semanal</div>
+                        <div class="card-body d-block justify-content-center align-items-center ">
+                            <div>
+                                <h5 class="card-title ">Escuderia</h5>
+                            </div>
+                            <div class="card-body d-block justify-content-center align-items-center">
+                                <p class="text-center" id="monto-soles">Red Bull</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-evenly">
+                    <div class="card text-bg-primary mb-3" style="max-width: 18rem;">
+                        <div class="card-header">Gasto Mensual</div>
+                        <div class="card-body d-block justify-content-center align-items-center ">
+                            <div>
+                                <h5 class="card-title ">Prendas</h5>
+                            </div>
+                            <div class="card-body d-block justify-content-center align-items-center">
+                                <p class="text-center" id="monto-soles">S/2000</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card text-bg-primary mb-3" style="max-width: 18rem;">
+                        <div class="card-header">Ingreso Mensual</div>
+                        <div class="card-body d-block justify-content-center align-items-center ">
+                            <div>
+                                <h5 class="card-title ">Ingresos</h5>
+                            </div>
+                            <div class="card-body d-block justify-content-center align-items-center">
+                                <p class="text-center" id="monto-soles">S/3400</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card text-bg-primary mb-3" style="max-width: 18rem;">
+                        <div class="card-header">Numero de Pedidos Mensuales</div>
+                        <div class="card-body d-block justify-content-center align-items-center ">
+                            <div>
+                                <h5 class="card-title ">Pedidos Registrados</h5>
+                            </div>
+                            <div class="card-body d-block justify-content-center align-items-center">
+                                <p class="text-center" id="monto-soles">87</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{layout/fragmentos :: librerias}"> </div>
+</body>
+</html>

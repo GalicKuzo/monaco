@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{layout/fragmentos :: cabecera}"> </head>
+<body>
+<body class="sb-nav-fixed">
+    <nav th:replace="~{layout/fragmentos :: barra}"></nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav th:replace="~{layout/fragmentos :: menu}"></nav>
+        </div>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="py-4">
+
+            </div>
+            <div class="container px-4 py-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Gastos de Prendas
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Mensaje</strong> <span th:text="${mensaje}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <form class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Prenda</label>
+                                    <select class="form-select" aria-label="Default select example" required>
+                                        <option selected>Seleccionar Prenda</option>
+                                        <option value="1">Cuello Redondo Unisex</option>
+                                        <option value="2">Cuello Redondo Dama</option>
+                                        <option value="3">Camisero Unisex</option>
+                                        <option value="4">Camisero Dama</option>
+                                        <option value="5">Cafarena Unisex</option>
+                                        <option value="6">Cafarena Dama</option>
+                                        <option value="7">Gorras</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione una prenda
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Costo por Unidad</label>
+                                    <input type="text" class="form-control" placeholder="Ingrese Costo por Unidad Ejem: 18" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese un costo en soles (SOLO NUMEROS)
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Cantidad</label>
+                                    <input type="text" class="form-control" placeholder="Ingrese la cantidad" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese una cantidad (SOLO NUMEROS)
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center pt-4">
+                                    <button type="submit" class="btn btn-dark">
+                                        <i class="fa-solid fa-cloud"></i> Registrar Gastos de Prendas
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Gastos Basicos
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Mensaje</strong> <span th:text="${mensaje}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <form class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Gasto Basico</label>
+                                    <select class="form-select" aria-label="Default select example" required>
+                                        <option selected>Seleccionar un gasto</option>
+                                        <option value="1">DTF</option>
+                                        <option value="2">Publicidad</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione un tipo de gasto
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Costo Total</label>
+                                    <input type="text" class="form-control" placeholder="Ingrese Costo Total" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese el costo Total
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center pt-4">
+                                    <button type="submit" class="btn btn-dark">
+                                        <i class="fa-solid fa-cloud"></i> Registrar Gastos Basicos
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Gastos Varios
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Mensaje</strong> <span th:text="${mensaje}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <form class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Gasto Varios</label>
+                                    <select class="form-select" aria-label="Default select example" required>
+                                        <option selected>Seleccionar un gasto</option>
+                                        <option value="1">Cinta Termica</option>
+                                        <option value="2">Film</option>
+                                        <option value="3">Cajas</option>
+                                        <option value="4">Bolsas</option>
+                                        <option value="5">Cinta de Embalaje</option>
+                                        <option value="6">DTF</option>
+                                        <option value="7">Publicidad</option>
+                                        <option value="8">Otro</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione un tipo de gasto
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Costo Total</label>
+                                    <input type="text" class="form-control" placeholder="Ingrese Costo Total" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese el costo Total
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center pt-4">
+                                    <button type="submit" class="btn btn-dark">
+                                        <i class="fa-solid fa-cloud"></i> Registrar Gastos Varios
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{layout/fragmentos :: librerias}"> </div>
+</body>
+</html>

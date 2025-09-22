@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{layout/fragmentos :: cabecera}"> </head>
+<body>
+<body class="sb-nav-fixed">
+    <nav th:replace="~{layout/fragmentos :: barra}"></nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav th:replace="~{layout/fragmentos :: menu}"></nav>
+        </div>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="py-4">
+
+            </div>
+            <div class="container px-4 py-4">
+                <div class="row justify-content-evenly">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Pedidos
+                        </div>
+                        <div class="card-body">
+                            <table id="datatablesSimple">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre / Celular</th>
+                                        <th>DNI</th> 
+                                        <th>Distrito</th>
+                                        <th>Pago Total</th>
+                                        <th>Estado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Nombre / Celular</th>
+                                        <th>DNI</th> 
+                                        <th>Distrito</th>
+                                        <th>Pago Total</th>
+                                        <th>Estado</th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr th:each="item: ${listaPedido}" th:if="${item.Estado == 'COMPLETADO'}">
+                                        <td th:text="${item.id_Cliente.Nombre + ' / ' + item.id_Cliente.Celular}"></td>
+                                        <td th:text="${item.id_Cliente.DNI}"></td>
+                                        <td th:text="${item.id_Cliente.Distrito}"></td>
+                                        <td th:text="${item.PagoTotal}"></td>
+                                        <td th:text="${item.Estado}"></td>
+                                        <td>
+                                            <div class="text-center">
+                                                <a class="btn btn-warning">
+                                                    Detalle
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{layout/fragmentos :: librerias}"> </div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{layout/fragmentos :: cabecera}"> </head>
+<body>
+<body class="sb-nav-fixed">
+    <nav th:replace="~{layout/fragmentos :: barra}"></nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav th:replace="~{layout/fragmentos :: menu}"></nav>
+        </div>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="py-4">
+
+            </div>
+            <div class="container px-4 py-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Cliente
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Mensaje</strong> <span th:text="${mensaje}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <form th:action="@{/pedidos/guardarCliente}" th:object="${Cliente}" method="post" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>DNI</label>
+                                    <input th:field="*{DNI}" type="text" class="form-control" placeholder="Ingrese DNI Ejem:72682648" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese numero de DNI (SOLO 8 DIGITOS)
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Nombre de Cliente</label>
+                                    <input th:field="*{Nombre}" type="text" class="form-control" placeholder="Ingrese nombre Ejem:Sandro" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese un nombre
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Ceular</label>
+                                    <input th:field="*{Celular}" type="text" class="form-control" placeholder="Ingrese numero de Celular Ejem:987381612" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese numero celular (SOLO 9 DIGITOS)
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Ditrito o Ciudad de Envío</label>
+                                    <input th:field="*{Distrito}" type="text" class="form-control" placeholder="Ingrese un distrito Ejem:San Miguel" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese un Distrito
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center pt-4">
+                                    <button type="submit" class="btn btn-dark">
+                                        <i class="fa-solid fa-cloud"></i> Registrar Cliente
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Pedido
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Mensaje</strong> <span th:text="${mensaje}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <form th:action="@{/pedidos/guardarPedido}" th:object="${Pedido}" method="post" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Cliente</label>
+                                    <select th:field="*{id_Cliente.id_Cliente}" class="form-select" aria-label="Default select example" required>
+                                        <option selected disabled value="">Seleccione un Cliente</option>
+                                        <option th:each="item : ${listaClientes}" th:value="${item.id_Cliente}" th:text="${item.Nombre + ' - ' + item.DNI}"></option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione un cliente
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Estado</label>
+                                    <select th:field="*{Estado}" class="form-select" aria-label="Default select example" required>
+                                        <option selected disabled value="">Seleccione un Estado</option>
+                                        <option value="PENDIENTE">PENDIENTE</option>
+                                        <option value="COMPLETADO">COMPLETADO</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione una de las opciones
+                                    </div>
+                                </div>
+                                <div class="col-md-6 ">
+                                    <label>Fecha de Entrega</label>
+                                    <input th:field="*{FechaEntrega}" type="date" class="form-control" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese una fecha
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Pago Total</label>
+                                    <input th:field="*{PagoTotal}" type="text" class="form-control" placeholder="Ingrese el pago total, Ejem: 130" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese el pago total
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center pt-4">
+                                    <button type="submit" class="btn btn-dark">
+                                        <i class="fa-solid fa-cloud"></i> Crear Pedido
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Pedidos
+                        </div>
+                        <div class="card-body">
+                            <table id="datatablesSimple">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre / Celular</th>
+                                        <th>DNI</th> 
+                                        <th>Distrito</th>
+                                        <th>Pago Total</th>
+                                        <th>Estado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Nombre / Celular</th>
+                                        <th>DNI</th> 
+                                        <th>Distrito</th>
+                                        <th>Pago Total</th>
+                                        <th>Estado</th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr th:each="item: ${listaPedido}" th:if="${item.Estado == 'PENDIENTE'}">
+                                        <td th:text="${item.id_Cliente.Nombre + ' / ' + item.id_Cliente.Celular}"></td>
+                                        <td th:text="${item.id_Cliente.DNI}"></td>
+                                        <td th:text="${item.id_Cliente.Distrito}"></td>
+                                        <td th:text="${item.PagoTotal}"></td>
+                                        <td th:text="${item.Estado}"></td>
+                                        <td>
+                                            <div class="text-center">
+                                                <a class="btn btn-danger" th:href="@{/pedidos/finalizar/{id}(id=${item.id_Pedido})}">
+                                                    Finalizar
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{layout/fragmentos :: librerias}"> </div>
+</body>
+</html>

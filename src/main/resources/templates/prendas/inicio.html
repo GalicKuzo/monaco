@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{layout/fragmentos :: cabecera}"> </head>
+<body>
+<body class="sb-nav-fixed">
+    <nav th:replace="~{layout/fragmentos :: barra}"></nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav th:replace="~{layout/fragmentos :: menu}"></nav>
+        </div>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="py-4">
+
+            </div>
+            <div class="container px-4 py-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Producto
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Mensaje</strong> <span th:text="${mensaje}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <form th:action="@{/prendas/guardarPrenda}" th:object="${Prenda}" method="post" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Nombre de Escuderia/Prenda</label>
+                                    <input th:field="*{Escuderia}" type="text" class="form-control" placeholder="Ingrese un nombre" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese un nombre
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center pt-4">
+                                    <button type="submit" class="btn btn-dark">
+                                        <i class="fa-solid fa-cloud"></i> Crear Producto
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Detalle de Producto
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Mensaje</strong> <span th:text="${mensaje}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <form th:action="@{/prendas/guardarDetallePrenda}" th:object="${DetallePrenda}" method="post" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Pedido</label>
+                                    <select th:field="*{id_Pedido.id_Pedido}" class="form-select" aria-label="Default select example" required>
+                                        <option selected disabled value="">Seleccione un Pedido</option>
+                                        <option th:each="item : ${listaPedido}" th:if="${item.Estado == 'PENDIENTE'}" th:value="${item.id_Pedido}" th:text="${item.id_Cliente.Nombre + ' - ' + item.id_Cliente.DNI}"></option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione un pedido
+                                    </div>
+                                </div>
+                                <div class="col-md-6  mb-3">
+                                    <label>Escuderia/Producto</label>
+                                    <select th:field="*{id_Prenda.id_Prenda}" class="form-select" aria-label="Default select example" required>
+                                        <option selected disabled value="" >Seleccionar Prenda</option>
+                                        <option th:each="item : ${listaPrenda}" th:value="${item.id_Prenda}" th:text="${item.Escuderia}"></option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione una prenda
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Color</label>
+                                    <input th:field="*{Color}" type="text" class="form-control" placeholder="Ingrese un color, Ejem: Rojo" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese un color
+                                    </div>
+                                </div>
+                                <div class="col-md-6  mb-3">
+                                    <label>Tipo de Prenda/Producto</label>
+                                    <select th:field="*{TipoPrenda}" class="form-select" aria-label="Default select example" required>
+                                        <option selected disabled value="">Seleccionar Prenda/Producto</option>
+                                        <option value="Cuello Redondo">Cuello Redondo</option>
+                                        <option value="Camisero">Camisero</option>
+                                        <option value="Cafarena">Cafarena</option>
+                                        <option value="Gorra">Gorra</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione una prenda
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Tipo de Corte</label>
+                                    <select th:field="*{TipoCorte}" class="form-select" aria-label="Default select example" required>
+                                        <option selected disabled value="">Seleccione un Corte</option>
+                                        <option value="Unisex">Unisex</option>
+                                        <option value="Corte Princesa">Corte Princesa</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione un tipo de corte
+                                    </div>
+                                </div>
+                                <div class="col-md-6  mb-3">
+                                    <label>Talla</label>
+                                    <input th:field="*{Talla}" type="text" class="form-control" placeholder="Ingrese una talla, Ejem: S" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese una talla
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Cantidad</label>
+                                    <input th:field="*{Cantidad}" type="text" class="form-control" placeholder="Ingrese una cantidad, Ejem: 1" required/>
+                                    <div class="invalid-feedback">
+                                        Ingrese una cantidad
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center pt-4">
+                                    <button type="submit" class="btn btn-dark">
+                                        <i class="fa-solid fa-cloud"></i> Crear Detalle
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Personalizados
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Mensaje</strong> <span th:text="${mensaje}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <form th:action="@{/prendas/guardarPersonalizado}" th:object="${Personalizado}" method="post" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="mb-3">
+                                    <label>Prenda a Personalizar</label>
+                                    <select th:field="*{id_DetallePrenda.id_DetallePrenda}" class="form-select" aria-label="Default select example" required>
+                                        <option selected disabled value="">Seleccione una Prenda</option>
+                                        <option th:each="item : ${listaDetallePrenda}" th:if="${item.id_Pedido.Estado == 'PENDIENTE'}" th:value="${item.id_DetallePrenda}" th:text="${item.id_Prenda.Escuderia + ' '+ item.Color + ' ' + ' Talla ' + item.Talla + ' - ' + item.id_Pedido.id_Cliente.Nombre}"></option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione una Prenda
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="exampleFormControlTextarea1" class="form-label">Descripción</label>
+                                    <textarea th:field="*{Descripcion}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                                <div class="col-12 text-center pt-4">
+                                    <button type="submit" class="btn btn-dark">
+                                        <i class="fa-solid fa-cloud"></i> Agregar Personalizado
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{layout/fragmentos :: librerias}"> </div>
+</body>
+</html>

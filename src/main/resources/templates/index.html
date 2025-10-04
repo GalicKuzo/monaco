@@ -16,6 +16,11 @@
             </div>
             <div class="container px-4 py-4">
                 <div class="row justify-content-evenly">
+                    <div class="py-4">
+                        <a th:href="@{/productos}">
+                            <button type="button" class="btn btn-warning">Produtos a comprar</button>
+                        </a>
+                    </div>
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
@@ -29,6 +34,7 @@
                                         <th>Distrito</th> 
                                         <th>Producto</th>
                                         <th>Cantidad</th>
+                                        <th>Fecha de Entrega</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -37,6 +43,7 @@
                                         <th>Distrito</th> 
                                         <th>Producto</th>
                                         <th>Cantidad</th>
+                                        <th>Fecha de Entrega</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -56,6 +63,7 @@
                                             </span>
                                         </td>
                                         <td th:text="${item.Cantidad}"></td>
+                                        <td th:text="${item.id_Pedido.FechaEntrega}"></td>
                                     </tr>
                                 </tbody>
                             </table>

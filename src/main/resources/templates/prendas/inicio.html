@@ -142,7 +142,7 @@
                                     <label>Prenda a Personalizar</label>
                                     <select th:field="*{id_DetallePrenda.id_DetallePrenda}" class="form-select" aria-label="Default select example" required>
                                         <option selected disabled value="">Seleccione una Prenda</option>
-                                        <option th:each="item : ${listaDetallePrenda}" th:if="${item.id_Pedido.Estado == 'PENDIENTE'}" th:value="${item.id_DetallePrenda}" th:text="${item.id_Prenda.Escuderia + ' '+ item.Color + ' ' + ' Talla ' + item.Talla + ' - ' + item.id_Pedido.id_Cliente.Nombre}"></option>
+                                        <option th:each="item : ${listaDetallePrenda}" th:if="${item.id_Pedido.Estado == 'PENDIENTE'}" th:value="${item.id_DetallePrenda}" th:text="${item.id_Prenda.Escuderia + ' '+ item.Color + ' '+ item.TipoPrenda +' ' + ' Talla ' + item.Talla + ' - ' + item.id_Pedido.id_Cliente.Nombre}"></option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Seleccione una Prenda

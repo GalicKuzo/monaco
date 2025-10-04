@@ -1,0 +1,21 @@
+package com.monaco.monaco.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.monaco.monaco.model.service.IDetallePrendaService;
+
+@Controller
+public class ProductosComprarController {
+
+    @Autowired
+    private IDetallePrendaService detallePrendaService;
+
+    @GetMapping("/productos")
+    public String inicio(Model model){
+        model.addAttribute("listaDetallePrenda", detallePrendaService.cargDetallePrendas());
+        return "productos_comprar";
+    }
+}

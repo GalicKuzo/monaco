@@ -65,4 +65,10 @@ public class PrendasController {
         flash.addFlashAttribute("mensaje", rpta);
         return "redirect:/prendas/";
     }
+
+    @GetMapping("/productos")
+    public String productos(Model model){
+        model.addAttribute("listaDetallePrenda", detallePrendaService.cargDetallePrendas());
+        return "prendas/productos_comprar";
+    }
 }

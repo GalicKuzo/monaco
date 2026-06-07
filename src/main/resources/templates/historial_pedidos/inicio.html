@@ -1,71 +1,192 @@
 <!DOCTYPE html>
-<html lang="en">
-<head th:replace="~{layout/fragmentos :: cabecera}"> </head>
-<body>
+<html lang="es">
+<head th:replace="~{layout/fragmentos :: cabecera}"></head>
 <body class="sb-nav-fixed">
-    <nav th:replace="~{layout/fragmentos :: barra}"></nav>
-    <div id="layoutSidenav">
-        <div id="layoutSidenav_nav">
-            <nav th:replace="~{layout/fragmentos :: menu}"></nav>
-        </div>
-    </div>
-    <div id="layoutSidenav_content">
-        <main>
-            <div class="py-4">
 
+<nav th:replace="~{layout/fragmentos :: barra}"></nav>
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav th:replace="~{layout/fragmentos :: menu}"></nav>
+    </div>
+</div>
+
+<div id="layoutSidenav_content">
+    <main>
+        <div class="page-header">
+            <h1>Historial de Pedidos</h1>
+            <p>Pedidos completados y cerrados.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                Pedidos Completados
             </div>
-            <div class="container px-4 py-4">
-                <div class="row justify-content-evenly">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            Pedidos
-                        </div>
-                        <div class="card-body">
-                            <table id="datatablesSimple">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre / Celular</th>
-                                        <th>DNI</th> 
-                                        <th>Distrito</th>
-                                        <th>Pago Total</th>
-                                        <th>Estado</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>Nombre / Celular</th>
-                                        <th>DNI</th> 
-                                        <th>Distrito</th>
-                                        <th>Pago Total</th>
-                                        <th>Estado</th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    <tr th:each="item: ${listaPedido}" th:if="${item.Estado == 'COMPLETADO'}">
-                                        <td th:text="${item.id_Cliente.Nombre + ' / ' + item.id_Cliente.Celular}"></td>
-                                        <td th:text="${item.id_Cliente.DNI}"></td>
-                                        <td th:text="${item.id_Cliente.Distrito}"></td>
-                                        <td th:text="${item.PagoTotal}"></td>
-                                        <td th:text="${item.Estado}"></td>
-                                        <td>
-                                            <div class="text-center">
-                                                <a class="btn btn-warning">
-                                                    Detalle
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            <div class="card-body" style="padding:0">
+                <div class="table-wrap">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>Nombre / Celular</th>
+                                <th>DNI</th>
+                                <th>Distrito</th>
+                                <th>Pago Total</th>
+                                <th>Estado</th>
+                                <th>Fecha Entrega</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Nombre / Celular</th>
+                                <th>DNI</th>
+                                <th>Distrito</th>
+                                <th>Pago Total</th>
+                                <th>Estado</th>
+                                <th>Fecha Entrega</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr th:each="item: ${listaPedido}" th:if="${item.Estado == 'COMPLETADO'}">
+                                <td th:text="${item.id_Cliente.Nombre + ' / ' + item.id_Cliente.Celular}"></td>
+                                <td th:text="${item.id_Cliente.DNI}" class="mono"></td>
+                                <td th:text="${item.id_Cliente.Distrito}"></td>
+                                <td class="mono" th:text="${'S/' + item.PagoTotal}"></td>
+                                <td th:text="${item.Estado}"></td>
+                                <td th:text="${item.FechaEntrega}"></td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm btn-detalle-pedido"
+                                            th:data-id="${item.id_Pedido}"
+                                            th:data-cliente="${item.id_Cliente.Nombre}"
+                                            th:data-celular="${item.id_Cliente.Celular}"
+                                            th:data-distrito="${item.id_Cliente.Distrito}"
+                                            th:data-fecha="${item.FechaEntrega}"
+                                            th:data-total="${item.PagoTotal}">
+                                        <i class="fa-solid fa-eye"></i> Detalle
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </main>
+        </div>
+
+    </main>
+</div>
+
+<!-- ── Modal Detalle Pedido ── -->
+<div class="modal-overlay" id="modalDetalle">
+    <div class="modal-box" style="max-width:600px;max-height:85vh;display:flex;flex-direction:column">
+        <div class="modal-header">
+            <span><i class="fa-solid fa-eye"></i> Detalle del Pedido</span>
+            <button class="modal-close" id="detalleClose">✕</button>
+        </div>
+        <div id="detalleBody" style="overflow-y:auto;flex:1"></div>
     </div>
-    <div th:replace="~{layout/fragmentos :: librerias}"> </div>
+</div>
+
+<div th:replace="~{layout/fragmentos :: librerias}"></div>
+
+<script>
+(function () {
+    var overlay  = document.getElementById('modalDetalle');
+    var closeBtn = document.getElementById('detalleClose');
+    var body     = document.getElementById('detalleBody');
+
+    function closeModal() { overlay.classList.remove('open'); }
+
+    function field(label, value) {
+        return '<div>'
+            + '<div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:3px">' + label + '</div>'
+            + '<div style="font-size:13px;color:var(--text)">' + (value || '—') + '</div>'
+            + '</div>';
+    }
+
+    function renderModal(btn, prendas) {
+        var cliente  = btn.getAttribute('data-cliente');
+        var celular  = btn.getAttribute('data-celular');
+        var distrito = btn.getAttribute('data-distrito');
+        var fecha    = btn.getAttribute('data-fecha');
+        var total    = btn.getAttribute('data-total');
+
+        var html = '<div style="padding:18px 20px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:10px 24px">'
+            + field('Cliente',          cliente)
+            + field('Celular',          celular)
+            + field('Distrito',         distrito)
+            + field('Fecha de Entrega', fecha)
+            + field('Pago Total',       'S/' + total)
+            + '</div>';
+
+        html += '<div style="padding:16px 20px">';
+        html += '<div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-2);margin-bottom:10px">Prendas del pedido</div>';
+
+        if (prendas && prendas.length > 0) {
+            html += '<div style="display:flex;flex-direction:column;gap:8px">';
+            prendas.forEach(function (dp) {
+                var escuderia = dp.escuderia || dp.Escuderia || '';
+                var color     = dp.color     || dp.Color     || '';
+                var tipo      = dp.tipoPrenda|| dp.TipoPrenda|| '';
+                var corte     = dp.tipoCorte || dp.TipoCorte || '';
+                var talla     = dp.talla     || dp.Talla     || '';
+                var cantidad  = dp.cantidad  || dp.Cantidad  || '';
+                var pers      = dp.personalizados;
+                var custom    = (pers && pers.length > 0) ? (pers[0].descripcion || pers[0].Descripcion || '') : '';
+
+                html += '<div style="background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--r-sm);padding:11px 14px">'
+                    + '<div style="font-size:13px;font-weight:500;color:var(--text)">'
+                    +   escuderia + ' &nbsp;·&nbsp; ' + color + ' &nbsp;·&nbsp; ' + tipo + ' ' + corte
+                    + '</div>'
+                    + '<div style="font-size:12px;color:var(--text-2);margin-top:4px">'
+                    +   'Talla <strong>' + talla + '</strong>'
+                    +   ' &nbsp;·&nbsp; Cantidad <strong>' + cantidad + '</strong>'
+                    + '</div>'
+                    + (custom ? '<div style="font-size:11.5px;color:var(--text-2);margin-top:6px;display:flex;align-items:flex-start;gap:5px">'
+                        + '<i class="fa-solid fa-pen-nib" style="margin-top:2px;font-size:10px"></i>'
+                        + '<span>' + custom + '</span></div>' : '')
+                    + '</div>';
+            });
+            html += '</div>';
+        } else {
+            html += '<div style="color:var(--text-3);font-size:13px;text-align:center;padding:12px 0">Sin prendas registradas</div>';
+        }
+
+        html += '</div>';
+        body.innerHTML = html;
+        overlay.classList.add('open');
+    }
+
+    function openModal(btn) {
+        var id = btn.getAttribute('data-id');
+
+        /* Loading state */
+        body.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-3)">'
+            + '<i class="fa-solid fa-spinner fa-spin"></i> Cargando…</div>';
+        overlay.classList.add('open');
+
+        /* Fetch prendas del pedido */
+        fetch('/historial_pedidos/detalle/' + id)
+            .then(function (r) { return r.json(); })
+            .then(function (prendas) { renderModal(btn, prendas); })
+            .catch(function () {
+                body.innerHTML = '<div style="padding:24px;text-align:center;color:var(--red-tx)">'
+                    + '<i class="fa-solid fa-triangle-exclamation"></i> Error al cargar el detalle.</div>';
+            });
+    }
+
+    /* Delegación de eventos */
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.btn-detalle-pedido');
+        if (btn) { openModal(btn); return; }
+        if (e.target === overlay) { closeModal(); return; }
+        if (closeBtn.contains(e.target)) { closeModal(); return; }
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal();
+    });
+})();
+</script>
+
 </body>
 </html>

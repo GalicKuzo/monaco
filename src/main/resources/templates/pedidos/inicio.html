@@ -1,172 +1,192 @@
 <!DOCTYPE html>
-<html lang="en">
-<head th:replace="~{layout/fragmentos :: cabecera}"> </head>
-<body>
+<html lang="es">
+<head th:replace="~{layout/fragmentos :: cabecera}"></head>
 <body class="sb-nav-fixed">
-    <nav th:replace="~{layout/fragmentos :: barra}"></nav>
-    <div id="layoutSidenav">
-        <div id="layoutSidenav_nav">
-            <nav th:replace="~{layout/fragmentos :: menu}"></nav>
-        </div>
-    </div>
-    <div id="layoutSidenav_content">
-        <main>
-            <div class="py-4">
 
-            </div>
-            <div class="container px-4 py-4">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        Cliente
-                    </div>
-                    <div class="card-body">
-                        <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
-                            <strong>Mensaje</strong> <span th:text="${mensaje}"></span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        <form th:action="@{/pedidos/guardarCliente}" th:object="${Cliente}" method="post" class="needs-validation" novalidate>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>DNI</label>
-                                    <input th:field="*{DNI}" type="text" class="form-control" placeholder="Ingrese DNI Ejem:72682648" required/>
-                                    <div class="invalid-feedback">
-                                        Ingrese numero de DNI (SOLO 8 DIGITOS)
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label>Nombre de Cliente</label>
-                                    <input th:field="*{Nombre}" type="text" class="form-control" placeholder="Ingrese nombre Ejem:Sandro" required/>
-                                    <div class="invalid-feedback">
-                                        Ingrese un nombre
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label>Ceular</label>
-                                    <input th:field="*{Celular}" type="text" class="form-control" placeholder="Ingrese numero de Celular Ejem:987381612" required/>
-                                    <div class="invalid-feedback">
-                                        Ingrese numero celular (SOLO 9 DIGITOS)
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label>Ditrito o Ciudad de Envío</label>
-                                    <input th:field="*{Distrito}" type="text" class="form-control" placeholder="Ingrese un distrito Ejem:San Miguel" required/>
-                                    <div class="invalid-feedback">
-                                        Ingrese un Distrito
-                                    </div>
-                                </div>
-                                <div class="col-12 text-center pt-4">
-                                    <button type="submit" class="btn btn-dark">
-                                        <i class="fa-solid fa-cloud"></i> Registrar Cliente
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="card mb-4">
-                    <div class="card-header">
-                        Pedido
-                    </div>
-                    <div class="card-body">
-                        <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
-                            <strong>Mensaje</strong> <span th:text="${mensaje}"></span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        <form th:action="@{/pedidos/guardarPedido}" th:object="${Pedido}" method="post" class="needs-validation" novalidate>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>Cliente</label>
-                                    <select th:field="*{id_Cliente.id_Cliente}" class="form-select" aria-label="Default select example" required>
-                                        <option selected disabled value="">Seleccione un Cliente</option>
-                                        <option th:each="item : ${listaClientes}" th:value="${item.id_Cliente}" th:text="${item.Nombre + ' - ' + item.DNI}"></option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Seleccione un cliente
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label>Estado</label>
-                                    <select th:field="*{Estado}" class="form-select" aria-label="Default select example" required>
-                                        <option selected disabled value="">Seleccione un Estado</option>
-                                        <option value="PENDIENTE">PENDIENTE</option>
-                                        <option value="COMPLETADO">COMPLETADO</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Seleccione una de las opciones
-                                    </div>
-                                </div>
-                                <div class="col-md-6 ">
-                                    <label>Fecha de Entrega</label>
-                                    <input th:field="*{FechaEntrega}" type="date" class="form-control" required/>
-                                    <div class="invalid-feedback">
-                                        Ingrese una fecha
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label>Pago Total</label>
-                                    <input th:field="*{PagoTotal}" type="text" class="form-control" placeholder="Ingrese el pago total, Ejem: 130" required/>
-                                    <div class="invalid-feedback">
-                                        Ingrese el pago total
-                                    </div>
-                                </div>
-                                <div class="col-12 text-center pt-4">
-                                    <button type="submit" class="btn btn-dark">
-                                        <i class="fa-solid fa-cloud"></i> Crear Pedido
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            Pedidos
-                        </div>
-                        <div class="card-body">
-                            <table id="datatablesSimple">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre / Celular</th>
-                                        <th>DNI</th> 
-                                        <th>Distrito</th>
-                                        <th>Pago Total</th>
-                                        <th>Estado</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>Nombre / Celular</th>
-                                        <th>DNI</th> 
-                                        <th>Distrito</th>
-                                        <th>Pago Total</th>
-                                        <th>Estado</th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    <tr th:each="item: ${listaPedido}" th:if="${item.Estado == 'PENDIENTE'}">
-                                        <td th:text="${item.id_Cliente.Nombre + ' / ' + item.id_Cliente.Celular}"></td>
-                                        <td th:text="${item.id_Cliente.DNI}"></td>
-                                        <td th:text="${item.id_Cliente.Distrito}"></td>
-                                        <td th:text="${item.PagoTotal}"></td>
-                                        <td th:text="${item.Estado}"></td>
-                                        <td>
-                                            <div class="text-center">
-                                                <a class="btn btn-danger" th:href="@{/pedidos/finalizar/{id}(id=${item.id_Pedido})}">
-                                                    Finalizar
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-            </div>
-        </main>
+<nav th:replace="~{layout/fragmentos :: barra}"></nav>
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav th:replace="~{layout/fragmentos :: menu}"></nav>
     </div>
-    <div th:replace="~{layout/fragmentos :: librerias}"> </div>
+</div>
+
+<div id="layoutSidenav_content">
+    <main>
+        <div class="page-header">
+            <h1>Pedidos</h1>
+            <p>Registra clientes y crea pedidos pendientes.</p>
+        </div>
+
+        <!-- Registrar Cliente -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-solid fa-user-plus"></i>
+                Registrar Cliente
+            </div>
+            <div class="card-body">
+                <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div><strong>Atención:</strong> <span th:text="${mensaje}"></span></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar">✕</button>
+                </div>
+                <form th:action="@{/pedidos/guardarCliente}" th:object="${Cliente}" method="post" class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>DNI</label>
+                            <input th:field="*{DNI}" type="text" class="form-control" placeholder="Ej: 72682648" maxlength="8" required/>
+                            <div class="invalid-feedback">Ingrese 8 dígitos de DNI.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Nombre del Cliente</label>
+                            <input th:field="*{Nombre}" type="text" class="form-control" placeholder="Ej: Sandro López" required/>
+                            <div class="invalid-feedback">Ingrese un nombre.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Celular</label>
+                            <input th:field="*{Celular}" type="text" class="form-control" placeholder="Ej: 987381612" maxlength="9" required/>
+                            <div class="invalid-feedback">Ingrese 9 dígitos de celular.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Distrito o Ciudad de Envío</label>
+                            <input th:field="*{Distrito}" type="text" class="form-control" placeholder="Ej: San Miguel" required/>
+                            <div class="invalid-feedback">Ingrese un distrito.</div>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-dark">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Registrar Cliente
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Crear Pedido -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-solid fa-cart-shopping"></i>
+                Crear Pedido
+            </div>
+            <div class="card-body">
+                <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div><strong>Atención:</strong> <span th:text="${mensaje}"></span></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar">✕</button>
+                </div>
+                <form th:action="@{/pedidos/guardarPedido}" th:object="${Pedido}" method="post" class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Cliente</label>
+                            <!-- Autocomplete: busca por celular, nombre o DNI -->
+                            <div class="autocomplete-wrap" id="clienteWrap">
+                                <input type="text"
+                                       id="clienteSearch"
+                                       class="form-control"
+                                       placeholder="Buscar por celular, nombre o DNI…"
+                                       autocomplete="off"
+                                       required/>
+                                <ul class="autocomplete-list" id="clienteList"></ul>
+                                <!-- Campo oculto que se envía al servidor -->
+                                <input type="hidden"
+                                       th:field="*{id_Cliente.id_Cliente}"
+                                       id="clienteId"
+                                       required/>
+                            </div>
+                            <div class="invalid-feedback" id="clienteError">Seleccione un cliente.</div>
+
+                            <!-- Data de clientes embebida desde Thymeleaf -->
+                            <script th:inline="javascript">
+                                window.MONACO_CLIENTES = /*[[${listaClientes}]]*/ [];
+                            </script>
+                            <script>
+                                // DEBUG: ver nombres de campos (borrar después)
+                                if (window.MONACO_CLIENTES && window.MONACO_CLIENTES.length > 0) {
+                                    console.log('Cliente keys:', Object.keys(window.MONACO_CLIENTES[0]));
+                                    console.log('Primer cliente:', window.MONACO_CLIENTES[0]);
+                                }
+                            </script>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Estado</label>
+                            <select th:field="*{Estado}" class="form-select" required>
+                                <option selected disabled value="">Seleccione un estado</option>
+                                <option value="PENDIENTE">Pendiente</option>
+                                <option value="COMPLETADO">Completado</option>
+                            </select>
+                            <div class="invalid-feedback">Seleccione un estado.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Fecha de Entrega</label>
+                            <input th:field="*{FechaEntrega}" type="date" class="form-control" required/>
+                            <div class="invalid-feedback">Ingrese una fecha.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Pago Total (S/)</label>
+                            <input th:field="*{PagoTotal}" type="number" class="form-control" placeholder="Ej: 130" min="0" step="0.01" required/>
+                            <div class="invalid-feedback">Ingrese el pago total.</div>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-dark">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Crear Pedido
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabla pedidos pendientes -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-solid fa-list-check"></i>
+                Pedidos Pendientes
+            </div>
+            <div class="card-body" style="padding:0">
+                <div class="table-wrap">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>Nombre / Celular</th>
+                                <th>DNI</th>
+                                <th>Distrito</th>
+                                <th>Pago Total</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Nombre / Celular</th>
+                                <th>DNI</th>
+                                <th>Distrito</th>
+                                <th>Pago Total</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr th:each="item: ${listaPedido}" th:if="${item.Estado == 'PENDIENTE'}">
+                                <td th:text="${item.id_Cliente.Nombre + ' / ' + item.id_Cliente.Celular}"></td>
+                                <td th:text="${item.id_Cliente.DNI}"></td>
+                                <td th:text="${item.id_Cliente.Distrito}"></td>
+                                <td class="mono" th:text="${'S/' + item.PagoTotal}"></td>
+                                <td th:text="${item.Estado}"></td>
+                                <td>
+                                    <a class="btn btn-danger btn-sm"
+                                       th:href="@{/pedidos/finalizar/{id}(id=${item.id_Pedido})}">
+                                        <i class="fa-solid fa-check"></i> Finalizar
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<div th:replace="~{layout/fragmentos :: librerias}"></div>
 </body>
 </html>

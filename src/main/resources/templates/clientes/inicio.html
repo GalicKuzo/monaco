@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="~{layout/fragmentos :: cabecera}"></head>
+<body class="sb-nav-fixed">
+
+<nav th:replace="~{layout/fragmentos :: barra}"></nav>
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav th:replace="~{layout/fragmentos :: menu}"></nav>
+    </div>
+</div>
+
+<div id="layoutSidenav_content">
+    <main>
+        <div class="page-header">
+            <h1>Clientes</h1>
+            <p>Todos los clientes registrados en el sistema.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-solid fa-users"></i>
+                Lista de Clientes
+            </div>
+            <div class="card-body" style="padding:0">
+                <div class="table-wrap">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>DNI</th>
+                                <th>Celular</th>
+                                <th>Distrito</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>DNI</th>
+                                <th>Celular</th>
+                                <th>Distrito</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr th:each="item, stat : ${listaClientes}">
+                                <td th:text="${stat.count}" class="mono" style="color:var(--text-3)"></td>
+                                <td th:text="${item.Nombre}" style="font-weight:500"></td>
+                                <td th:text="${item.DNI}" class="mono"></td>
+                                <td th:text="${item.Celular}" class="mono"></td>
+                                <td th:text="${item.Distrito}"></td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm btn-editar-cliente"
+                                            th:data-id="${item.id_Cliente}"
+                                            th:data-nombre="${item.Nombre}"
+                                            th:data-dni="${item.DNI}"
+                                            th:data-celular="${item.Celular}"
+                                            th:data-distrito="${item.Distrito}">
+                                        <i class="fa-solid fa-pen"></i> Editar
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- ── Modal Editar Cliente ── -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <span><i class="fa-solid fa-pen"></i> Editar Cliente</span>
+            <button class="modal-close" id="modalClose">✕</button>
+        </div>
+        <form th:action="@{/clientes/editar}" method="post" class="needs-validation" novalidate>
+            <div class="modal-body">
+                <input type="hidden" name="id_Cliente" id="edit-id"/>
+                <div class="modal-field">
+                    <label>Nombre</label>
+                    <input type="text" name="Nombre" id="edit-nombre" class="form-control" required/>
+                    <div class="invalid-feedback">Ingrese un nombre.</div>
+                </div>
+                <div class="modal-field">
+                    <label>DNI</label>
+                    <input type="text" name="DNI" id="edit-dni" class="form-control" maxlength="8" required/>
+                    <div class="invalid-feedback">Ingrese 8 dígitos de DNI.</div>
+                </div>
+                <div class="modal-field">
+                    <label>Celular</label>
+                    <input type="text" name="Celular" id="edit-celular" class="form-control" maxlength="12" required/>
+                    <div class="invalid-feedback">Ingrese el celular.</div>
+                </div>
+                <div class="modal-field">
+                    <label>Distrito</label>
+                    <input type="text" name="Distrito" id="edit-distrito" class="form-control" required/>
+                    <div class="invalid-feedback">Ingrese un distrito.</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" id="modalCancel">Cancelar</button>
+                <button type="submit" class="btn btn-dark">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div th:replace="~{layout/fragmentos :: librerias}"></div>
+
+<script>
+(function () {
+    var overlay   = document.getElementById('modalOverlay');
+    var btnClose  = document.getElementById('modalClose');
+    var btnCancel = document.getElementById('modalCancel');
+
+    function openModal(btn) {
+        document.getElementById('edit-id').value       = btn.getAttribute('data-id');
+        document.getElementById('edit-nombre').value   = btn.getAttribute('data-nombre');
+        document.getElementById('edit-dni').value      = btn.getAttribute('data-dni');
+        document.getElementById('edit-celular').value  = btn.getAttribute('data-celular');
+        document.getElementById('edit-distrito').value = btn.getAttribute('data-distrito');
+        overlay.classList.add('open');
+    }
+
+    function closeModal() {
+        overlay.classList.remove('open');
+    }
+
+    /* Delegación de eventos: funciona aunque DataTables re-renderice las filas */
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.btn-editar-cliente');
+        if (btn) { openModal(btn); return; }
+        if (e.target === overlay) { closeModal(); return; }
+        if (e.target === btnClose || btnClose.contains(e.target))  { closeModal(); return; }
+        if (e.target === btnCancel || btnCancel.contains(e.target)) { closeModal(); return; }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal();
+    });
+})();
+</script>
+
+</body>
+</html>

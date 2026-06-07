@@ -5,14 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.monaco.monaco.model.dao.IDetallePrendaDAO;
+import com.monaco.monaco.model.dao.IDetallePrendaDao;
 import com.monaco.monaco.model.entidad.DetallePrenda;
 
 @Service
 public class DetallePrendaService implements IDetallePrendaService{
 
     @Autowired
-    private IDetallePrendaDAO prendaDAO;
+    private IDetallePrendaDao prendaDAO;
 
     @Override
     public String guardarDetallePrenda(DetallePrenda detallePrenda) {

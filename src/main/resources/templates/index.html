@@ -15,67 +15,55 @@
         <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
             <div>
                 <h1>Dashboard</h1>
-                <p>Resumen de pedidos, ingresos y gastos.</p>
+                <p>Resumen de pedidos e ingresos.</p>
             </div>
             <a th:href="@{/prendas/productos}" class="btn btn-warning">
                 <i class="fa-solid fa-basket-shopping"></i> Productos a Comprar
             </a>
         </div>
 
-        <!-- Stats semanales -->
-        <div class="stat-grid">
-            <div class="stat-card">
-                <div class="s-label">Gasto Semanal · Prendas</div>
-                <div class="s-value">S/200</div>
-                <div class="s-sub">semana actual</div>
-            </div>
-            <div class="stat-card">
-                <div class="s-label">Gasto Semanal · Básicos</div>
-                <div class="s-value">S/200</div>
-                <div class="s-sub">semana actual</div>
-            </div>
-            <div class="stat-card">
-                <div class="s-label">Gasto Semanal · Varios</div>
-                <div class="s-value">S/200</div>
-                <div class="s-sub">semana actual</div>
-            </div>
+        <!-- ── Stats semanales ── -->
+        <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+
             <div class="stat-card green">
                 <div class="s-label">Ingreso Semanal</div>
-                <div class="s-value">S/1,000</div>
-                <div class="s-sub">prendas vendidas</div>
+                <div class="s-value" th:text="${'S/' + ingresoSemanal}">S/0</div>
+                <div class="s-sub">todos los pedidos entregados esta semana</div>
             </div>
-            <div class="stat-card green">
+
+            <div class="stat-card">
                 <div class="s-label">Pedidos Semanales</div>
-                <div class="s-value">4</div>
-                <div class="s-sub">clientes ingresados</div>
+                <div class="s-value" th:text="${pedidosSemanales}">0</div>
+                <div class="s-sub">con fecha de entrega esta semana</div>
             </div>
+
             <div class="stat-card yellow">
-                <div class="s-label">Escudería más vendida</div>
-                <div class="s-value" style="font-size:17px;letter-spacing:-.01em">Red Bull</div>
-                <div class="s-sub">semana actual</div>
+                <div class="s-label">Escudería más pedida</div>
+                <div class="s-value" style="font-size:17px;letter-spacing:-.01em"
+                     th:text="${escuderiaMasVendida}">—</div>
+                <div class="s-sub">entre todos los pedidos</div>
             </div>
+
         </div>
 
-        <!-- Stats mensuales -->
-        <div class="stat-grid">
-            <div class="stat-card blue">
-                <div class="s-label">Gasto Mensual · Prendas</div>
-                <div class="s-value">S/2,000</div>
-                <div class="s-sub">mes actual</div>
-            </div>
+        <!-- ── Stats mensuales ── -->
+        <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+
             <div class="stat-card blue">
                 <div class="s-label">Ingreso Mensual</div>
-                <div class="s-value">S/3,400</div>
-                <div class="s-sub">ingresos totales</div>
+                <div class="s-value" th:text="${'S/' + ingresoMensual}">S/0</div>
+                <div class="s-sub">pedidos completados este mes</div>
             </div>
+
             <div class="stat-card blue">
                 <div class="s-label">Pedidos del Mes</div>
-                <div class="s-value">87</div>
-                <div class="s-sub">pedidos registrados</div>
+                <div class="s-value" th:text="${pedidosMes}">0</div>
+                <div class="s-sub">con fecha de entrega este mes</div>
             </div>
+
         </div>
 
-        <!-- Tabla pedidos pendientes -->
+        <!-- ── Tabla pedidos pendientes ── -->
         <div class="card">
             <div class="card-header">
                 <i class="fa-solid fa-list-check"></i>
@@ -89,8 +77,8 @@
                                 <th>Nombre / Celular</th>
                                 <th>Distrito</th>
                                 <th>Producto</th>
-                                <th>Cantidad</th>
-                                <th>Fecha de Entrega</th>
+                                <th>Cant.</th>
+                                <th>Fecha Entrega</th>
                             </tr>
                         </thead>
                         <tfoot>
@@ -98,23 +86,22 @@
                                 <th>Nombre / Celular</th>
                                 <th>Distrito</th>
                                 <th>Producto</th>
-                                <th>Cantidad</th>
-                                <th>Fecha de Entrega</th>
+                                <th>Cant.</th>
+                                <th>Fecha Entrega</th>
                             </tr>
                         </tfoot>
                         <tbody>
-                            <tr th:each="item: ${listaDetallePrenda}" th:if="${item.id_Pedido.Estado == 'PENDIENTE'}">
+                            <tr th:each="item: ${listaDetallePrenda}">
                                 <td th:text="${item.id_Pedido.id_Cliente.Nombre + ' / ' + item.id_Pedido.id_Cliente.Celular}"></td>
                                 <td th:text="${item.id_Pedido.id_Cliente.Distrito}"></td>
                                 <td>
                                     <span th:text="${item.id_Prenda.Escuderia + ' ' + item.Color + ' ' + item.TipoPrenda + ' ' + item.TipoCorte + ' ' + item.Talla}"></span>
-                                    <span th:if="${item.personalizados != null and !item.personalizados.isEmpty()}">
-                                        <span th:each="pers : ${item.personalizados}"
-                                              th:text="${' · ' + pers.Descripcion}"
-                                              style="color:var(--text-2);font-size:12px"></span>
-                                    </span>
+                                    <span th:if="${item.personalizados != null and !item.personalizados.isEmpty()}"
+                                          th:each="pers : ${item.personalizados}"
+                                          th:text="${' · ' + pers.Descripcion}"
+                                          style="color:var(--text-2);font-size:12px"></span>
                                 </td>
-                                <td th:text="${item.Cantidad}"></td>
+                                <td th:text="${item.Cantidad}" class="mono"></td>
                                 <td th:text="${item.id_Pedido.FechaEntrega}"></td>
                             </tr>
                         </tbody>

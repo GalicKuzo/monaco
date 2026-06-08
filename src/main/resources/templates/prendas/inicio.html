@@ -24,10 +24,10 @@
                 Crear Producto / Escudería
             </div>
             <div class="card-body">
-                <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                <div th:if="${mensajePrenda != null}" class="alert alert-warning alert-dismissible fade show">
                     <i class="fa-solid fa-triangle-exclamation"></i>
-                    <div><strong>Atención:</strong> <span th:text="${mensaje}"></span></div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar">✕</button>
+                    <div><strong>Atención:</strong> <span th:text="${mensajePrenda}"></span></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert">✕</button>
                 </div>
                 <form th:action="@{/prendas/guardarPrenda}" th:object="${Prenda}" method="post" class="needs-validation" novalidate>
                     <div class="row">
@@ -46,17 +46,17 @@
             </div>
         </div>
 
-        <!-- Detalle de Producto -->
+        <!-- Detalle de Prenda -->
         <div class="card">
             <div class="card-header">
                 <i class="fa-solid fa-shirt"></i>
                 Detalle de Prenda
             </div>
             <div class="card-body">
-                <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                <div th:if="${mensajeDetalle != null}" class="alert alert-warning alert-dismissible fade show">
                     <i class="fa-solid fa-triangle-exclamation"></i>
-                    <div><strong>Atención:</strong> <span th:text="${mensaje}"></span></div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar">✕</button>
+                    <div><strong>Atención:</strong> <span th:text="${mensajeDetalle}"></span></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert">✕</button>
                 </div>
                 <form th:action="@{/prendas/guardarDetallePrenda}" th:object="${DetallePrenda}" method="post" class="needs-validation" novalidate>
                     <div class="row">
@@ -133,10 +133,10 @@
                 Personalizados
             </div>
             <div class="card-body">
-                <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                <div th:if="${mensajePersonalizado != null}" class="alert alert-warning alert-dismissible fade show">
                     <i class="fa-solid fa-triangle-exclamation"></i>
-                    <div><strong>Atención:</strong> <span th:text="${mensaje}"></span></div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar">✕</button>
+                    <div><strong>Atención:</strong> <span th:text="${mensajePersonalizado}"></span></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert">✕</button>
                 </div>
                 <form th:action="@{/prendas/guardarPersonalizado}" th:object="${Personalizado}" method="post" class="needs-validation" novalidate>
                     <div class="row">

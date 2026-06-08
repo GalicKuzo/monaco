@@ -24,36 +24,30 @@ public class PedidosController {
     @Autowired
     private IPedidoService pedidoService;
 
-
     @GetMapping("/")
     public String inicio(Model model){
-        Clientes clientes = new Clientes();
-        Pedido pedido = new Pedido();
-        model.addAttribute("Cliente", clientes);
-        model.addAttribute("Pedido", pedido);
+        model.addAttribute("Cliente", new Clientes());
+        model.addAttribute("Pedido", new Pedido());
         model.addAttribute("listaClientes", clientesService.cargarClientes());
         model.addAttribute("listaPedido", pedidoService.cargarPedido());
-        return"pedidos/inicio";
+        return "pedidos/inicio";
     }
 
     @PostMapping("/guardarCliente")
     public String guardarCliente(Clientes c, RedirectAttributes flash){
-        String rpta = clientesService.guardarClientes(c);
-        flash.addFlashAttribute("mensaje", rpta);
+        flash.addFlashAttribute("mensajeCliente", clientesService.guardarClientes(c));
         return "redirect:/pedidos/";
     }
 
     @PostMapping("/guardarPedido")
     public String guardarPedido(Pedido p, RedirectAttributes flash){
-        String rpta = pedidoService.guardarPedido(p);
-        flash.addFlashAttribute("mensaje",rpta);
+        flash.addFlashAttribute("mensajePedido", pedidoService.guardarPedido(p));
         return "redirect:/pedidos/";
     }
 
     @GetMapping("/finalizar/{id}")
     public String finalizarPedido(@PathVariable("id") Long id) {
         pedidoService.FinalizarPedido(id);
-        return "redirect:/pedidos/"; 
+        return "redirect:/pedidos/";
     }
-
 }

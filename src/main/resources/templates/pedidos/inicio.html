@@ -24,10 +24,10 @@
                 Registrar Cliente
             </div>
             <div class="card-body">
-                <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                <div th:if="${mensajeCliente != null}" class="alert alert-warning alert-dismissible fade show">
                     <i class="fa-solid fa-triangle-exclamation"></i>
-                    <div><strong>Atención:</strong> <span th:text="${mensaje}"></span></div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar">✕</button>
+                    <div><strong>Atención:</strong> <span th:text="${mensajeCliente}"></span></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert">✕</button>
                 </div>
                 <form th:action="@{/pedidos/guardarCliente}" th:object="${Cliente}" method="post" class="needs-validation" novalidate>
                     <div class="row">
@@ -43,8 +43,8 @@
                         </div>
                         <div class="col-md-6">
                             <label>Celular</label>
-                            <input th:field="*{Celular}" type="text" class="form-control" placeholder="Ej: 987381612" maxlength="9" required/>
-                            <div class="invalid-feedback">Ingrese 9 dígitos de celular.</div>
+                            <input th:field="*{Celular}" type="text" class="form-control" placeholder="Ej: 987381612" maxlength="12" required/>
+                            <div class="invalid-feedback">Ingrese el celular.</div>
                         </div>
                         <div class="col-md-6">
                             <label>Distrito o Ciudad de Envío</label>
@@ -68,42 +68,29 @@
                 Crear Pedido
             </div>
             <div class="card-body">
-                <div th:if="${mensaje != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                <div th:if="${mensajePedido != null}" class="alert alert-warning alert-dismissible fade show">
                     <i class="fa-solid fa-triangle-exclamation"></i>
-                    <div><strong>Atención:</strong> <span th:text="${mensaje}"></span></div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar">✕</button>
+                    <div><strong>Atención:</strong> <span th:text="${mensajePedido}"></span></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert">✕</button>
                 </div>
                 <form th:action="@{/pedidos/guardarPedido}" th:object="${Pedido}" method="post" class="needs-validation" novalidate>
                     <div class="row">
                         <div class="col-md-6">
                             <label>Cliente</label>
-                            <!-- Autocomplete: busca por celular, nombre o DNI -->
                             <div class="autocomplete-wrap" id="clienteWrap">
-                                <input type="text"
-                                       id="clienteSearch"
-                                       class="form-control"
+                                <input type="text" id="clienteSearch" class="form-control"
                                        placeholder="Buscar por celular, nombre o DNI…"
-                                       autocomplete="off"
-                                       required/>
+                                       autocomplete="off" required/>
                                 <ul class="autocomplete-list" id="clienteList"></ul>
-                                <!-- Campo oculto que se envía al servidor -->
-                                <input type="hidden"
-                                       th:field="*{id_Cliente.id_Cliente}"
-                                       id="clienteId"
-                                       required/>
+                                <input type="hidden" th:field="*{id_Cliente.id_Cliente}" id="clienteId"/>
                             </div>
                             <div class="invalid-feedback" id="clienteError">Seleccione un cliente.</div>
-
-                            <!-- Data de clientes embebida desde Thymeleaf -->
                             <script th:inline="javascript">
                                 window.MONACO_CLIENTES = /*[[${listaClientes}]]*/ [];
                             </script>
                             <script>
-                                // DEBUG: ver nombres de campos (borrar después)
-                                if (window.MONACO_CLIENTES && window.MONACO_CLIENTES.length > 0) {
-                                    console.log('Cliente keys:', Object.keys(window.MONACO_CLIENTES[0]));
-                                    console.log('Primer cliente:', window.MONACO_CLIENTES[0]);
-                                }
+                                if (window.MONACO_CLIENTES && window.MONACO_CLIENTES.length > 0)
+                                    console.log('[Monaco] Cliente keys:', Object.keys(window.MONACO_CLIENTES[0]));
                             </script>
                         </div>
                         <div class="col-md-6">
@@ -167,7 +154,7 @@
                         <tbody>
                             <tr th:each="item: ${listaPedido}" th:if="${item.Estado == 'PENDIENTE'}">
                                 <td th:text="${item.id_Cliente.Nombre + ' / ' + item.id_Cliente.Celular}"></td>
-                                <td th:text="${item.id_Cliente.DNI}"></td>
+                                <td th:text="${item.id_Cliente.DNI}" class="mono"></td>
                                 <td th:text="${item.id_Cliente.Distrito}"></td>
                                 <td class="mono" th:text="${'S/' + item.PagoTotal}"></td>
                                 <td th:text="${item.Estado}"></td>

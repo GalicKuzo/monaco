@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.monaco.monaco.model.entidad.DetallePrenda;
 import com.monaco.monaco.model.entidad.Personalizado;
 import com.monaco.monaco.model.entidad.Prenda;
@@ -19,50 +20,37 @@ import com.monaco.monaco.model.service.IPrendaService;
 @RequestMapping("/prendas")
 public class PrendasController {
 
-    @Autowired
-    private IPrendaService prendaService;
-
-    @Autowired
-    private IDetallePrendaService detallePrendaService;
-
-    @Autowired
-    private IPedidoService pedidoService;
-
-    @Autowired
-    private IPersonalizadoService personalizadoService;
+    @Autowired private IPrendaService          prendaService;
+    @Autowired private IDetallePrendaService   detallePrendaService;
+    @Autowired private IPedidoService          pedidoService;
+    @Autowired private IPersonalizadoService   personalizadoService;
 
     @GetMapping("/")
     public String inicio(Model model){
-        Prenda prenda = new Prenda();
-        DetallePrenda detallePrenda = new DetallePrenda();
-        Personalizado personalizado = new Personalizado();
-        model.addAttribute("DetallePrenda", detallePrenda);
-        model.addAttribute("Prenda", prenda);
-        model.addAttribute("Personalizado", personalizado);
-        model.addAttribute("listaPrenda", prendaService.cargarPrendas());
-        model.addAttribute("listaPedido", pedidoService.cargarPedido());
+        model.addAttribute("DetallePrenda",    new DetallePrenda());
+        model.addAttribute("Prenda",           new Prenda());
+        model.addAttribute("Personalizado",    new Personalizado());
+        model.addAttribute("listaPrenda",      prendaService.cargarPrendas());
+        model.addAttribute("listaPedido",      pedidoService.cargarPedido());
         model.addAttribute("listaDetallePrenda", detallePrendaService.cargDetallePrendas());
         return "prendas/inicio";
     }
 
     @PostMapping("/guardarPrenda")
     public String guardarPrenda(Prenda p, RedirectAttributes flash){
-        String rpta = prendaService.gurdarPrenda(p);
-        flash.addFlashAttribute("mensaje", rpta);
+        flash.addFlashAttribute("mensajePrenda", prendaService.gurdarPrenda(p));
         return "redirect:/prendas/";
     }
 
     @PostMapping("/guardarDetallePrenda")
     public String guardarDetallePrenda(DetallePrenda dp, RedirectAttributes flash){
-        String rpta = detallePrendaService.guardarDetallePrenda(dp);
-        flash.addFlashAttribute("mensaje", rpta);
+        flash.addFlashAttribute("mensajeDetalle", detallePrendaService.guardarDetallePrenda(dp));
         return "redirect:/prendas/";
     }
 
     @PostMapping("/guardarPersonalizado")
     public String guardarPersonalizado(Personalizado p, RedirectAttributes flash){
-        String rpta = personalizadoService.guardarPersonalizado(p);
-        flash.addFlashAttribute("mensaje", rpta);
+        flash.addFlashAttribute("mensajePersonalizado", personalizadoService.guardarPersonalizado(p));
         return "redirect:/prendas/";
     }
 
